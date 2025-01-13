@@ -4,10 +4,7 @@ import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Exemple de code pour explorer la structure d'une classe (super-classes, interfaces, classes internes)
- * sans provoquer de ConcurrentModificationException.
- */
+
 public class Exercice1Printer_first_step {
 
     /**
