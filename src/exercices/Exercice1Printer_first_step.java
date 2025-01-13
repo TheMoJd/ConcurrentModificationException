@@ -7,51 +7,36 @@ import java.util.Set;
 
 public class Exercice1Printer_first_step {
 
-    /**
-     * Gère la représentation textuelle d'une classe (ou interface) :
-     * - Ajoute cls à visited
-     * - Récupère super-classe, interfaces, classes internes
-     * - Construit un "mini code source" (déclaration) sous forme de String
-     * - Les nouvelles classes découvertes sont ajoutées à 'unbounds'
-     */
+
     static private String classRepresentation(Class<?> cls,
                                               Set<Class<?>> visited,
                                               Set<Class<?>> unbounds) {
-        // Chaîne de résultat
         String clsrep = "";
 
-        // Retirer cls de unbounds (puisqu'on va la traiter)
         unbounds.remove(cls);
 
-        // Marquer cls comme "visitée"
         visited.add(cls);
 
-        // Récupérer les modificateurs (public, static, etc.)
         int modifiers = cls.getModifiers();
 
-        // Décoder quelques modificateurs de base
         if (Modifier.isPublic(modifiers)) {
             clsrep += "public ";
         }
-        // Pour 'static', on évite de le mettre si c'est une interface top-level, etc.
-        // Ici on fait un choix simple : s'il est statique et (classe interne ou interface interne)
+
         if (Modifier.isStatic(modifiers)) {
             if (!cls.isInterface() || (cls.getDeclaringClass() != null)) {
                 clsrep += "static ";
             }
         }
 
-        // Classe ou interface ?
         String clskw = cls.isInterface() ? "interface" : "class";
 
-        // Nom simple
         clsrep += clskw + " " + cls.getSimpleName() + " ";
 
         // 1) Gestion de la super-classe
         Class<?> superClass = cls.getSuperclass();
         if (superClass != null && superClass != Object.class && !cls.isInterface()) {
             clsrep += "extends " + superClass.getSimpleName() + " ";
-            // Si on ne l'a pas encore visitée
             if (!visited.contains(superClass)) {
                 unbounds.add(superClass);
             }
@@ -60,8 +45,7 @@ public class Exercice1Printer_first_step {
         // 2) Gestion des interfaces
         Class<?>[] intfs = cls.getInterfaces();
         if (intfs.length > 0) {
-            // Si c'est une interface : extends
-            // Si c'est une classe : implements
+
             String keyword = cls.isInterface() ? "extends" : "implements";
             clsrep += keyword + " ";
 
@@ -71,7 +55,6 @@ public class Exercice1Printer_first_step {
                 if (i < intfs.length - 1) {
                     clsrep += ", ";
                 }
-                // Ajouter aux unbounds si pas encore visitée
                 if (!visited.contains(intf)) {
                     unbounds.add(intf);
                 }
@@ -96,11 +79,7 @@ public class Exercice1Printer_first_step {
         return clsrep;
     }
 
-    /**
-     * Lance le processus de génération de la représentation de cls,
-     * puis traite toutes les classes détectées au fur et à mesure,
-     * en évitant la ConcurrentModificationException.
-     */
+
     public static void classRepresentation(Class<?> cls) {
         // Ensemble des classes détectées mais pas encore explorées
         Set<Class<?>> unbounds = new HashSet<>();
@@ -128,8 +107,6 @@ public class Exercice1Printer_first_step {
                     System.out.println(result);
                 }
             }
-            // À la fin de cette boucle, d'autres classes internes ou super-classes
-            // peuvent avoir été ajoutées à unbounds. On réitère.
         }
     }
 }
