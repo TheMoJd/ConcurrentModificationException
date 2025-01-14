@@ -4,18 +4,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
-/**
- * Exercice 2:
- * Générer une spécification yUML (https://yuml.me)
- * à partir d'un ensemble de classes Java.
- */
+
 public class Exercice2 {
 
-    /**
-     * Méthode principale : génère une spécification yUML
-     * représentant les relations d'héritage, d'implémentation
-     * et les associations de champs entre les classes passées.
-     */
     public static String generateYumlFromClasses(Set<Class<?>> classes) {
 
         Set<String> definitions = new LinkedHashSet<>();
